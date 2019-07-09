@@ -1,0 +1,17 @@
+<h2>회원 가입</h2>
+
+<form method="POST">{% csrf_token %}
+        Username:
+        <input name="username" type="text">
+        <br><br>
+        Password:
+        <input name="password1" type="password">
+        <br><br>
+        Confirm Password:
+        <input name="password2" type="password">
+        <br><br>
+        Email:
+        <input name="email" type="text">
+        <br><br>
+        <button type="submit">가입하기</button>
+</form>

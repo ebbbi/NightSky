@@ -1,1 +1,10 @@
-메인
+<h1>공감의 밤하늘</h1>
+
+{% if user.is_authenticated %}
+    <h3>{{user.username}}님 로그인 되어 있습니다. </h3>
+    <h3>로그아웃 하시겠습니까?</h3><a href="{% url 'logout' %}">로그아웃</a>
+    <h3>메인 페이지로 이동하시겠습니까?</h3><a href="{% url 'total' %}">메인페이지로</a>
+{% else %}
+    <a href="{% url 'login' %}">로그인</a>
+    <a href="{% url 'register' %}">회원가입</a><br>
+{% endif %}

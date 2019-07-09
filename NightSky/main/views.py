@@ -46,3 +46,6 @@ def new(request):
         post=get_object_or_404(Post, pk=pk)
         post.delete()
     return redirect('post_list')
+
+def total(request):
+    return render(request, 'main/total.html')
