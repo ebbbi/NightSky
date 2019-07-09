@@ -1,4 +1,4 @@
-<h2>로그인</h2>
+<h2>아이디나 비밀번호가 틀렸습니다</h2>
 <form method="POST">{% csrf_token %}
         Username:
         <input name="username" type="text">
@@ -8,5 +8,5 @@
         <br><br>
         <button type="submit">Login</button>
 </form>
-<b>새로 계정을 만드시겠습니까?</b>
-<a href="{% url 'register' %}">회원가입</a>
+<b>새로 계정을 만드시겠습니까?</b><br><br>
+<button type="button" onclick="location.href='{% url 'register' %}'">회원가입</botton>
