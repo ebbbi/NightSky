@@ -10,3 +10,10 @@ class Post(models.Model):
     published_date = models.DateTimeField(
         blank=True, null=True
     )
+
+
+class Comment(models.Model):
+    post=models.ForeignKey(Post, on_delete=models.CASCADE)
+    content=models.TextField(default='')
+    author = models.ForeignKey('auth.user', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add = True)

@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from .models import Post
-
+from .forms import PostForm, CommentForm
 # Create your views here.
 def home(request):
     posts = Post.objects.all
@@ -19,12 +19,24 @@ def new(request):
             return redirect('home')
     else:
         form = PostForm()
-    
+
     return render(request, {'form':form})
 
     def post_detail(request, index):
         post = get_object_or_404(Post, pk=index)
-        return render(request, {'post': post})
+        if request.method =='POST':
+            form=CommentForm(request.POST)
+            if form.is_valid:
+                comment=form.save(commit=False)
+                comment.author=request.user
+                comment.post=post
+                comment.save()
+                return redirect('post_detail', index=post.pk)
+        else:
+            form=CommentForm()
+            comments=Comment.objects.filter(post=post)
+            return render(request, 'main/post_detail.html', {'form':form, 'post':post, 'comments':comments})
+
 
 
     def post_edit(request, index):
@@ -49,3 +61,23 @@ def new(request):
 
 def total(request):
     return render(request, 'main/total.html')
+
+def comment_edit(request, index, cindex):
+    comment=get_object_or_404(Comment, pk=cindex)
+    post=get_object_or_404(Post, pk=index)
+    if request.method=='POST':
+        form=CommentForm(request.POST, request.FILES, instance=comment)
+        if form.is_valid():
+            comment=form.save(commit=False)
+            comment.author=request.user
+            comment.save()
+            return redirect('post_detail', index=post.pk)
+    else:
+        form=CommentForm(instance=comment)
+        return render(request,'main/comment_edit.html', {'form':form })
+
+def comment_delete(request, index, cindex):
+    comment=get_object_or_404(Comment, pk=cindex)
+    post=get_object_or_404(Post, pk=index)
+    comment.delete()
+    return redirect('post_detail', index=post.pk)
