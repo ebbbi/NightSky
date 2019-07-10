@@ -59,8 +59,8 @@ def new(request):
         post.delete()
     return redirect('post_list')
 
-def total(request):
-    return render(request, 'main/total.html')
+def main(request):
+    return render(request, 'main/main.html')
 
 def comment_edit(request, index, cindex):
     comment=get_object_or_404(Comment, pk=cindex)

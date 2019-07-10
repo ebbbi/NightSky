@@ -6,22 +6,22 @@ from django.contrib.auth.models import User
 def register(request):
     if request.method=="POST":
         if request.POST['password1']!=request.POST['password2']:
-            return render(request, 'register_done.html', {'message': '비밀빈호가 일치하지 않습니다'})
+            return render(request, 'register.html',  {'message1': '※비밀번호가 일치하지 않습니다', 'username':request.POST['username'], 'email':request.POST['email']})
         try:
             username=request.POST['username']
             email=request.POST['email']
             password=request.POST['password1']
             new_user=User.objects.create_user(username, email, password)
             new_user.save()
-            return render(request, 'register_done.html', {'message': '회원가입이 완료되었습니다'})
+            return render(request, 'register_success.html', {'message': '회원가입이 완료되었습니다'})
         except:
-            return render(request, 'register_done.html', {'message': '회원이 이미 있습니다'})
+            return render(request, 'register.html', {'message2': '※회원이 이미 있습니다', 'username':request.POST['username'],'email':request.POST['email']})
     else:
-        form=UserRegisterForm()
-        return render(request, 'register.html', {'form':form})
+        #form=UserRegisterForm()
+        return render(request, 'register.html')
 
-def register_done(request):
-    return render(request, 'register_done.html')
+#def register_done(request):
+   # return render(request, 'register_done.html')
 
 def login(request):
     if request.method=="POST":

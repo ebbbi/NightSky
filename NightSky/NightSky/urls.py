@@ -22,11 +22,11 @@ from django.contrib.auth import views as auth_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', main.views.home, name="home"),
-    path('main/', main.views.total, name="total"),
+    path('main/', main.views.main, name="main"),
     path('accounts/', user_views.register, name="register"),
-    path('accounts/', user_views.register_done, name="register_done"),
+    #path('accounts/', user_views.register_done, name="register_done"),
     path('accounts/login', user_views.login, name="login"),
     path('accoutns/logout', user_views.logout, name="logout"),
-    path('comment/<int:index>/delete/<int:cindex>/',views.comment_delete, name="comment_delete"),
-    path('comment/<int:index>/edit/<int:cindex>/', views.comment_edit, name="comment_edit"),
+    path('comment/<int:index>/delete/<int:cindex>/',main.views.comment_delete, name="comment_delete"),
+    path('comment/<int:index>/edit/<int:cindex>/', main.views.comment_edit, name="comment_edit"),
 ]
