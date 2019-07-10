@@ -12,26 +12,24 @@ function validate(){
 
 
 <form action="{% url 'register' %}" method="POST">{% csrf_token %}
-        ID:
-        <input name="username" placeholder='Enter username' type="text" value='{{username}}'  required >
+        <input name="username" placeholder='id' type="text" value='{{username}}'  required >
         <br><br>
         {% if message2 %}
                 {{message2}}<br><br>
         {% endif %}
-        Password:
-        <input name="password1" id="pw" placeholder='Enter password' type="password" required>
+        <input name="email" placeholder='email' type="text" value='{{email}}' required>
         <br><br>
-        Confirm Password:
-        <input name="password2" id="checkpw" placeholder='Repeat password' type="password" required>
+        <input name="password1" id="pw" placeholder='password1' type="password" required>
+        <br><br>
+        <input name="password2" id="checkpw" placeholder='password2' type="password" required>
         <br><br>
         {% if message1 %}
                 {{message1}}<br><br>
         {% endif %}
-        Email:
-        <input name="email" placeholder='Enter email' type="text" value='{{email}}' required>
-        <br><br>
+        
+        <br>
         <!--{{form.as_p}}-->
-        <button type="submit">가입하기</button>
+        <button type="submit">Sign in</button>
         
 </form>
 </body>
