@@ -1,5 +1,5 @@
 <h2>아이디나 비밀번호가 틀렸습니다</h2>
-<form method="POST">{% csrf_token %}
+<form method="POST" action="{% url 'login' %}">{% csrf_token %}
         Username:
         <input name="username" type="text">
         <br><br>
