@@ -1,0 +1,17 @@
+<h1>공감의 밤하늘</h1>
+
+{% if user.is_authenticated %}
+    <h3>{{user.username}}님 로그인 되어 있습니다. </h3>
+    <h3>로그아웃 하시겠습니까?</h3>
+    <button type="button" onclick="location.href='{% url 'logout' %}'">로그아웃</button>
+    <h3>밤하늘로 이동하시겠습니까?</h3>
+    <button type="button" onclick="location.href='{% url 'main' %}'">밤하늘로</button>
+{% else %}
+    <form method="POST" action="{% url 'login' %}">{% csrf_token%}
+        Username: <input name="username" type="text" required><br><br>
+        Password: <input name="password" type="password" required><br><br>
+        <button type="submit">로그인</button>
+    </form>
+    <button type="button" onclick="location.href='{% url 'register' %}'">회원가입</button>
+
+{% endif %}
