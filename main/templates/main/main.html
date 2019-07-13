@@ -1,6 +1,116 @@
+<html>
+<head>
+
+<style>
+
+.content label{
+    cursor: pointer;
+}
+.content label input{/*remove radio check*/
+    display: none;
+}
+.content label span{
+    position: relative;
+    display: inline-block;
+    margin: 20px 10px;
+    padding: 5px;
+    width: 100px;
+    height:50px;
+    border: 1px solid black;
+    border-radius: 20pt;
+    text-align:center;
+}
+.content label input:checked~span{
+    border: 1px solid #008eff;
+    background: yellow;
+
+}
+.happy:hover{
+    background: #2efe64;
+}
+.funny:hover{
+    background: #2eccfa;
+}
+.sad:hover{
+    background: #d8d8d8;
+}
+.angry:hover{
+    background: #fe2e2e;
+}
+.stress:hover{
+    background: #bf00ff;
+}
+.guitar:hover{
+    background: #f7d358;
+}
+.btn {
+  border: 2px solid black;
+  background-color: white;
+  color: black;
+  padding: 14px 28px;
+  font-size: 16px;
+}
+.certain{
+    cursor:pointer;
+    color:white;
+    background-color:#bdbdbd;
+    border-radius:15pt;
+}
+.certain:hover{
+    background:#848484;
+}
+</style>
+</head>
+<body>
 <h1>전체 user의 밤하늘</h1>
+<p>오늘의 감정을 선택하세요</p>
+    <div class="content">
+        <form action="{% url 'emotion' %}" method="POST">{% csrf_token %}
+            <label>
+                <input type="radio" name="emo" value="행복" required>
+                <span class="happy">행복</span>
+            </label>
+            <label>
+                <input type="radio" name="emo" value="즐거움" required>
+                <span class="funny">즐거움</span>
+            </label>
+            <label>
+                <input type="radio" name="emo" value="슬픔" required>
+                <span class="sad">슬픔</span>
+            </label>
+            <label>
+                <input type="radio" name="emo" value="화남" required>
+                <span class="angry">화남</span>
+            </label>
+            <label>
+                <input type="radio" name="emo" value="스트레스" required>
+                <span class="stress">스트레스</span>
+            </label>
+            <label>
+                <input type="radio" name="emo" value="기타" required>
+                <span class="guitar">기타</span>
+            </label>
+
+            <br>
+            <button type="submit" class="btn certain">확인</button>
+           
+        </form>
+    </div>
+
+
+
+
+
 
 <h3>반갑습니다, {{user.username}}님!</h3>
+<<<<<<< HEAD
 <button type="button" onclick="location.href='{% url 'logout' %}'">로그아웃</button>
 
 <a href="{% url 'mysky' %}">달(개인 밤하늘로)</a>
+=======
+
+<button type="button" onclick="location.href='{% url 'logout' %}'">로그아웃</button>
+
+</body>
+</html>
+>>>>>>> 2a7baee2c3bdd157e9e8421d3a305a01e6141157
