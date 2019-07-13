@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script language="javascript">
+function validate(){
+
+}
+</script>
+</head>
+<body>
+<h2>회원 가입</h2>
+
+
+<form action="{% url 'register' %}" method="POST">{% csrf_token %}
+        <input name="username" placeholder='id' type="text" value='{{username}}'  required >
+        <br><br>
+        {% if message2 %}
+                {{message2}}<br><br>
+        {% endif %}
+        <input name="email" placeholder='email' type="text" value='{{email}}' required>
+        <br><br>
+        <input name="password1" id="pw" placeholder='password1' type="password" required>
+        <br><br>
+        <input name="password2" id="checkpw" placeholder='password2' type="password" required>
+        <br><br>
+        {% if message1 %}
+                {{message1}}<br><br>
+        {% endif %}
+        
+        <br>
+        <!--{{form.as_p}}-->
+        <button type="submit">Sign in</button>
+        
+</form>
+</body>
+</html>
