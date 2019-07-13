@@ -29,5 +29,4 @@ urlpatterns = [
     path('accoutns/logout', user_views.logout, name="logout"),
     path('comment/<int:index>/delete/<int:cindex>/',main.views.comment_delete, name="comment_delete"),
     path('comment/<int:index>/edit/<int:cindex>/', main.views.comment_edit, name="comment_edit"),
-    path('mysky/', main.views.mysky, name="mysky"), 
 ]

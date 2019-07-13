@@ -81,7 +81,3 @@ def comment_delete(request, index, cindex):
     post=get_object_or_404(Post, pk=index)
     comment.delete()
     return redirect('post_detail', index=post.pk)
-
-def mysky(request):
-    posts = Post.objects.filter(author=request.user).order_by('-pub_date')
-    return render(request, 'main/mysky.html', {'posts':posts})
