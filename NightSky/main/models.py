@@ -1,15 +1,12 @@
+from __future__ import unicode_literals
 from django.db import models
-from django.utils import timezone
 
 # Create your models here.
 class Post(models.Model):
-    body = models.TextField(default='')
-    writer = models.TextField(default='')
-    pub_date = models.DateTimeField(default='')
-    author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
-    published_date = models.DateTimeField(
-        blank=True, null=True
-    )
+    body=models.TextField(default='')
+    pub_date=models.DateTimeField(auto_now_add=True)
+    author=models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    emotion = models.CharField(max_length=255)
 
 
 class Comment(models.Model):

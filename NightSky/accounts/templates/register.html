@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script language="javascript">
-function validate(){
-
+<style>
+.register{
+        text-align:center;
 }
-</script>
+</style>
 </head>
 <body>
-<h2>회원 가입</h2>
+<h2 style="text-align:center; font-size:80pt;">회원 가입</h2>
 
-
+<div class="register">
 <form action="{% url 'register' %}" method="POST">{% csrf_token %}
         <input name="username" placeholder='id' type="text" value='{{username}}'  required >
         <br><br>
@@ -32,5 +32,6 @@ function validate(){
         <button type="submit">Sign in</button>
         
 </form>
+</div>
 </body>
 </html>

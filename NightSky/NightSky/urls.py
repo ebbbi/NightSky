@@ -30,5 +30,6 @@ urlpatterns = [
     path('comment/<int:index>/delete/<int:cindex>/',main.views.comment_delete, name="comment_delete"),
     path('comment/<int:index>/edit/<int:cindex>/', main.views.comment_edit, name="comment_edit"),
     path('mysky/', main.views.mysky, name="mysky"), 
+    path('realmain/', main.views.realmain, name="realmain"),
     
 ]

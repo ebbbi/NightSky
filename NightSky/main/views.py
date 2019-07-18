@@ -81,3 +81,18 @@ def comment_delete(request, index, cindex):
     post=get_object_or_404(Post, pk=index)
     comment.delete()
     return redirect('post_detail', index=post.pk)
+
+def mysky(request):
+    author = request.user
+    posts = Post.objects.filter(author=request.user).order_by('-pub_date')
+    return render(request, 'main/mysky.html', {'posts':posts})
+
+def realmain(request):
+    if request.method=="POST":
+        #em=request.POST['emo']
+        #post=Post.objects.filter(emotion=em)
+        #return render(request, 'realmain.html', {'post': post})
+        return render(request, 'main/realmain.html')
+
+    else:
+        return render(request, 'main/realmain.html')
