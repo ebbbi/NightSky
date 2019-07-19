@@ -1,2 +1,111 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body, html {
+    font-family: Arial, Helvetica, sans-serif;
+    background-image: "{% static 'images/stars.jpg' %}";
+    height:100%;
+}
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+</style>
+</head>
+
+<body>
+
 <h1>개인 밤하늘</h1>
 
+<input id = "myBtn" type = "button" onclick="get()" value= "글 추가" >
+<div id ="star" style = "width: 100%; height:100%;"></div>
+
+<div id="myModal" class="modal">
+
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <form method="POST">
+            {% csrf_token %}
+            {{form.as_p}}
+            <input type="submit" value="Save">
+    </form>
+  </div>
+</div>
+</body>
+</html>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+    var modal = document.getElementById('myModal');
+    var btn = document.getElementById("myBtn");
+    var span = document.getElementsByClassName("close")[0];
+    var flag = 0;
+    var pos = new Array();
+
+    btn.onclick = function get(){
+        flag=1;
+        if(flag==1){
+            $(document).ready(function(){
+                $('#star').click(function(e) {
+                    alert('x좌표:' +e.pageX + ', y좌표:' + e.pageY);
+                    pos[0]=e.pageX; pos[1]=e.pageY;
+                    $(function(){
+                        modal.style.display = "block"; });
+                });
+            });
+        }
+
+    span.onclick = function() {
+    modal.style.display = "none";
+    }
+    window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";}
+    }
+     
+    
+   
+    }
+    
+</script>
+
+{%for post in posts%}
+    {{post.content}}
+{%endfor%}

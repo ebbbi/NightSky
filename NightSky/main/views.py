@@ -85,7 +85,16 @@ def comment_delete(request, index, cindex):
 def mysky(request):
     author = request.user
     posts = Post.objects.filter(author=request.user).order_by('-pub_date')
-    return render(request, 'main/mysky.html', {'posts':posts})
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author=request.user
+            post.save()
+            return redirect('home')
+    else:
+        form = PostForm()
+    return render(request, 'main/mysky.html', {'posts':posts, 'form':form})
 
 def realmain(request):
     if request.method=="POST":
