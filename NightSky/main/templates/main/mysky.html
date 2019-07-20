@@ -55,6 +55,7 @@ body, html {
 <h1>개인 밤하늘</h1>
 
 <input id = "myBtn" type = "button" onclick="get()" value= "글 추가" >
+<input type="button" onclick="location.href='{% url 'user_update' %}'" value="회원정보 수정하기">
 <div id ="star" style = "width: 100%; height:100%;"></div>
 
 <div id="myModal" class="modal">
@@ -106,6 +107,3 @@ body, html {
     
 </script>
 
-{%for post in posts%}
-    {{post.content}}
-{%endfor%}

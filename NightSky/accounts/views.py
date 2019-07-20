@@ -6,18 +6,17 @@ from django.contrib.auth.models import User
 def register(request):
     if request.method=="POST":
         if request.POST['password1']!=request.POST['password2']:
-            return render(request, 'register.html',  {'message1': '※비밀번호가 일치하지 않습니다', 'username':request.POST['username'], 'email':request.POST['email']})
-        try:
+            return render(request, 'register.html', {'message1': '※비밀번호가 일치하지 않습니다.', 'username': request.POST['username'], 'email':request.POST['email']})
+        else:
             username=request.POST['username']
-            email=request.POST['email']
-            password=request.POST['password1']
-            new_user=User.objects.create_user(username, email, password)
-            new_user.save()
-            return render(request, 'register_success.html', {'message': '회원가입이 완료되었습니다'})
-        except:
-            return render(request, 'register.html', {'message2': '※회원이 이미 있습니다', 'username':request.POST['username'],'email':request.POST['email']})
-    else:
-        #form=UserRegisterForm()
+            if User.objects.filter(username=username).exists():
+                return render(request, 'register.html', {'message2':'※이미 사용중인 ID입니다.', 'username':request.POST['username'], 'email':request.POST['email']})
+            else:
+                password=request.POST['password1']
+                email=request.POST['email']
+                User.objects.create_user(username, email, password)
+                return render(request, 'main/home.html')
+    elif request.method=="GET":
         return render(request, 'register.html')
 
 #def register_done(request):
@@ -32,9 +31,8 @@ def login(request):
             auth.login(request, user)
             return redirect('main')
         else:
-            return render(request, 'login.html', {'error':'username or password is incorrect'})
-    else:
-        return render(request, 'login.html')
+            return render(request, 'main/home.html', {'message3': '※존재하지 않는 회원입니다.'})
+    
 
 def logout(request):
     auth.logout(request)
