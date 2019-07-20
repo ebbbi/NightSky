@@ -1,6 +1,9 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect, get_object_or_404
 from .models import Post
 from .forms import PostForm, CommentForm
+from django.contrib.auth.models import User
+from django.contrib import auth
+from django.contrib.auth.hashers import check_password
 # Create your views here.
 def home(request):
     posts = Post.objects.all
@@ -85,7 +88,16 @@ def comment_delete(request, index, cindex):
 def mysky(request):
     author = request.user
     posts = Post.objects.filter(author=request.user).order_by('-pub_date')
-    return render(request, 'main/mysky.html', {'posts':posts})
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author=request.user
+            post.save()
+            return redirect('home')
+    else:
+        form = PostForm()
+    return render(request, 'main/mysky.html', {'posts':posts, 'form':form})
 
 def realmain(request):
     if request.method=="POST":
@@ -96,3 +108,49 @@ def realmain(request):
 
     else:
         return render(request, 'main/realmain.html')
+
+def user_update(request):
+        user=get_object_or_404(User, username=request.user.username)
+        return render(request, 'main/user_update.html', {'user':user})
+def change_Email(request):
+        if request.method=="POST":
+                newemail=request.POST['NEWEMAIL']
+                user=get_object_or_404(User, username=request.user.username)
+                user.email=newemail
+                user.save()
+                #return render(request, 'user_update.html', {'message3':'※이메일이 변경되었습니다.'})
+                return redirect('user_update')
+def change_ID(request):
+        if request.method=="POST":
+                newID=request.POST['NEWID']
+                if User.objects.filter(username=newID).exists():
+                    return render(request, 'main/user_update.html', {'message4':'※이미 사용중인 ID입니다.'})
+                else:
+                    user=User.objects.get(username=request.user.username)
+                    user.username=newID
+                    user.save()
+                    auth.logout(request)
+                    return redirect('home')
+
+def change_pw(request):
+    if request.method == "POST":
+        current_password = request.POST['origin']
+        user = User.objects.get(username=request.user.username)
+        if check_password(current_password, user.password):
+            new_password = request.POST['password1']
+            password_confirm = request.POST['password2']
+            if new_password == password_confirm:
+                user.set_password(new_password)
+                user.save()
+                auth.logout(request)
+                return redirect('home')
+            else:
+                return render(request, 'main/user_update.html', {'message2':'※비밀번호가 일치하지 않습니다.'})
+        else:
+                return render(request, 'main/user_update.html', {'message':'※원래 비밀번호가 아닙니다.'})
+
+def mysearch(request):
+    if request.method=="POST":
+        word=request.POST['word']
+        post=Post.objects.filter(author=request.user)&(Post.objects.filter(body__icontains=word)|Post.objects.filter(emotion__icontains=word))
+        return render(request, 'main/mysky.html', {'posts':post})
