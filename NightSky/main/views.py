@@ -148,3 +148,9 @@ def change_pw(request):
                 return render(request, 'main/user_update.html', {'message2':'※비밀번호가 일치하지 않습니다.'})
         else:
                 return render(request, 'main/user_update.html', {'message':'※원래 비밀번호가 아닙니다.'})
+
+def mysearch(request):
+    if request.method=="POST":
+        word=request.POST['word']
+        post=Post.objects.filter(author=request.user)&(Post.objects.filter(body__icontains=word)|Post.objects.filter(emotion__icontains=word))
+        return render(request, 'main/mysky.html', {'posts':post})

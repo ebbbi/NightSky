@@ -56,6 +56,11 @@ body, html {
 
 <input id = "myBtn" type = "button" onclick="get()" value= "글 추가" >
 <input type="button" onclick="location.href='{% url 'user_update' %}'" value="회원정보 수정하기">
+<form action="{% url 'mysearch' %}" method="POST">{% csrf_token %}
+    <input name="word" type="search" placeholder="Search">
+    <button type="submit">Search</button>
+</form>
+
 <div id ="star" style = "width: 100%; height:100%;"></div>
 
 <div id="myModal" class="modal">
