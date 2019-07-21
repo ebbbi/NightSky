@@ -1,37 +1,96 @@
-<style>
-    body{ 
-    background-image: url(https://cdn.pixabay.com/photo/2017/08/10/08/26/stars-2619979_1280.jpg);
-    background-repeat: no-repeat;
-    background-size: cover;
-    color: white;}
-  
-.main{
-    
-    text-align:center;
+<html lang="ko">
+
+    <head>
+            <meta charset="utf-8">
+            <link href="https://fonts.googleapis.com/css?family=East+Sea+Dokdo&display=swap&subset=korean" rel="stylesheet">
+            <link href="https://fonts.googleapis.com/css?family=East+Sea+Dokdo|Nanum+Gothic+Coding|Noto+Serif+KR:400,500,600,700,900&display=swap&subset=korean" rel="stylesheet">
+            <link href="https://fonts.googleapis.com/css?family=East+Sea+Dokdo|Noto+Serif+KR:400,500,600,700,900&display=swap&subset=korean" rel="stylesheet">
+            <style>
+                body{ 
+                background-image: url(https://cdn.pixabay.com/photo/2017/08/10/08/26/stars-2619979_1280.jpg);
+                background-repeat: no-repeat;
+                background-size: cover;
+                color: white;
+
+                
+                
+                }
+            
+            .main{
+                
+                text-align:center;
+                
+            }
+            
+            .login{text-align:center; position: relative;  top:150px;font-family: 'East Sea Dokdo', cursive;
+font-family: 'Noto Serif KR', serif;  }
+
+        .myButton {
+            -moz-box-shadow: 0px 1px 0px 0px #1c1b18;
+            -webkit-box-shadow: 0px 1px 0px 0px #1c1b18;
+            box-shadow: 0px 1px 0px 0px #1c1b18;
+            background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #eae0c2), color-stop(1, #ccc2a6));
+            background:-moz-linear-gradient(top, #eae0c2 5%, #ccc2a6 100%);
+            background:-webkit-linear-gradient(top, #eae0c2 5%, #ccc2a6 100%);
+            background:-o-linear-gradient(top, #eae0c2 5%, #ccc2a6 100%);
+            background:-ms-linear-gradient(top, #eae0c2 5%, #ccc2a6 100%);
+            background:linear-gradient(to bottom, #eae0c2 5%, #ccc2a6 100%);
+            filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#eae0c2', endColorstr='#ccc2a6',GradientType=0);
+            background-color:#eae0c2;
+            -moz-border-radius:15px;
+            -webkit-border-radius:15px;
+            border-radius:15px;
+            border:2px solid #333029;
+            display:inline-block;
+            cursor:pointer;
+            color:#505739;
+            font-family:Arial;
+            font-size:14px;
+            font-weight:bold;
+            padding:12px 16px;
+            text-decoration:none;
+            text-shadow:0px 1px 0px #ffffff;
+
+            .myButton:hover {
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ccc2a6), color-stop(1, #eae0c2));
+	background:-moz-linear-gradient(top, #ccc2a6 5%, #eae0c2 100%);
+	background:-webkit-linear-gradient(top, #ccc2a6 5%, #eae0c2 100%);
+	background:-o-linear-gradient(top, #ccc2a6 5%, #eae0c2 100%);
+	background:-ms-linear-gradient(top, #ccc2a6 5%, #eae0c2 100%);
+	background:linear-gradient(to bottom, #ccc2a6 5%, #eae0c2 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ccc2a6', endColorstr='#eae0c2',GradientType=0);
+	background-color:#ccc2a6;
 }
-  
-</style>
+.myButton:active {
+	position:relative;
+	top:1px;
+}
+
+      
+            </style>
 
 
+<h1 style="text-align:center; font-size:100pt; font-family: 'East Sea Dokdo', cursive; position: relative; top:100px;">공감의 밤하늘</h1>
 
-<h1 style="text-align:center; font-size:80pt;">공감의 밤하늘</h1>
+<div class="login">
+    {% if user.is_authenticated %}
+        <h3>{{user.username}}님 로그인 되어 있습니다. </h3>
+        <h3>로그아웃 하시겠습니까?
+        <button type="button" class="myButton" onclick="location.href='{% url 'logout' %}'">logout</button></h3>
+        <h3>밤하늘로 이동하시겠습니까?
+        <button type="button" class="myButton" onclick="location.href='{% url 'main' %}'">sky</button></h3>
+    {% else %}
+        <div class="main">
+            <form method="POST" action="{% url 'login' %}">{% csrf_token%}
+                <input name="username" placeholder="id" type="text" required><br><br>
+                <input name="password" placeholder="password" type="password" required><br><br>
+                <button type="submit">login</button><br><br>
+                {% if message3 %}
+                    {{message3}}
+                {% endif %}
+            </form>
+            <button type="button" onclick="location.href='{% url 'register' %}'">회원가입</button>
+        </div>
+    {% endif %}
 
-{% if user.is_authenticated %}
-    <h3>{{user.username}}님 로그인 되어 있습니다. </h3>
-    <h3>로그아웃 하시겠습니까?</h3>
-    <button type="button" onclick="location.href='{% url 'logout' %}'">로그아웃</button>
-    <h3>밤하늘로 이동하시겠습니까?</h3>
-    <button type="button" onclick="location.href='{% url 'main' %}'">밤하늘로</button>
-{% else %}
-    <div class="main">
-        <form method="POST" action="{% url 'login' %}">{% csrf_token%}
-            <input name="username" placeholder="id" type="text" required><br><br>
-            <input name="password" placeholder="password" type="password" required><br><br>
-            <button type="submit">login</button><br><br>
-            {% if message3 %}
-                {{message3}}
-            {% endif %}
-        </form>
-        <button type="button" onclick="location.href='{% url 'register' %}'">회원가입</button>
-    </div>
-{% endif %}
+</div>
