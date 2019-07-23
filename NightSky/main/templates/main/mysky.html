@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 {% load static %}
 <html>
 <head>
@@ -67,7 +67,7 @@ body, html {
     <div id="1" style="position:relative; width:5%;">
         {{post.body}}<br>
     </div>
-    <script type="text/javascript">
+    <script>
       if(document.getElementById("1")){
         test();
       }
@@ -75,8 +75,8 @@ body, html {
         var str1=Number({{post.lat}})-120;
         var str2=Number({{post.lng}});
         var c=document.getElementById("1");
-        c.style.top=str1;
-        c.style.left=str2;
+        c.style.top=str1+'px';
+        c.style.left=str2+'px';
         document.getElementById("1").setAttribute("id", "2");
       }
     </script>
