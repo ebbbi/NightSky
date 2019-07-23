@@ -93,8 +93,10 @@ def mysky(request):
         if form.is_valid():
             post = form.save(commit=False)
             post.author=request.user
+            post.lng=request.POST['x']
+            post.lat=request.POST['y']
             post.save()
-            return redirect('home')
+            return redirect('mysky')
     else:
         form = PostForm()
     return render(request, 'main/mysky.html', {'posts':posts, 'form':form})

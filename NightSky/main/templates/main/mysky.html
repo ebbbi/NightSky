@@ -1,11 +1,9 @@
-<!DOCTYPE html>
-{% load static %}
 
+{% load static %}
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-   
 body{ 
     background-image: url(https://cdn.pixabay.com/photo/2017/08/10/08/26/stars-2619979_1280.jpg);
     background-repeat: no-repeat;
@@ -16,7 +14,7 @@ body, html {
     font-family: Arial, Helvetica, sans-serif;
     background-image: "{% static 'images/stars.jpg' %}";
     height:100%;
-}
+} 
 .modal {
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
@@ -29,7 +27,6 @@ body, html {
   background-color: rgb(0,0,0); /* Fallback color */
   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
-
 /* Modal Content/Box */
 .modal-content {
   background-color: #fefefe;
@@ -38,7 +35,6 @@ body, html {
   border: 1px solid #888;
   width: 80%; /* Could be more or less, depending on screen size */
 }
-
 /* The Close Button */
 .close {
   color: #aaa;
@@ -46,27 +42,46 @@ body, html {
   font-size: 28px;
   font-weight: bold;
 }
-
 .close:hover,
 .close:focus {
   color: black;
   text-decoration: none;
   cursor: pointer;
 }
-
+</style>
 </style>
 </head>
-
 <body>
-
 <h1>개인 밤하늘</h1>
 
 <input id = "myBtn" type = "button" onclick="get()" value= "글 추가" >
 <input type="button" onclick="location.href='{% url 'user_update' %}'" value="회원정보 수정하기">
+<button type="button" class="myButton" onclick="location.href='{% url 'logout' %}'">logout</button></h3>
+
 <form action="{% url 'mysearch' %}" method="POST">{% csrf_token %}
     <input name="word" type="search" placeholder="Search">
     <button type="submit">Search</button>
 </form>
+
+{% for post in posts %}
+    <div id="1" style="position:relative; width:5%;">
+        {{post.body}}<br>
+    </div>
+    <script type="text/javascript">
+      if(document.getElementById("1")){
+        test();
+      }
+      function test(){
+        var str1=Number({{post.lat}})-120;
+        var str2=Number({{post.lng}});
+        var c=document.getElementById("1");
+        c.style.top=str1;
+        c.style.left=str2;
+        document.getElementById("1").setAttribute("id", "2");
+      }
+    </script>
+{% endfor %}
+
 
 <div id ="star" style = "width: 100%; height:100%;"></div>
 
@@ -74,37 +89,46 @@ body, html {
 
   <div class="modal-content">
     <span class="close">&times;</span>
-    <form method="POST">
+    <form method="POST" action="{% url 'mysky' %}">
             {% csrf_token %}
             {{form.as_p}}
-            <input type="submit" value="Save">
+            <input type="hidden" id="x" name="x" value="">
+            <input type="hidden" id="y" name="y" value="">
+            <input type="submit" id="here" value="Save">
     </form>
   </div>
 </div>
-</body>
-</html>
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script>
     var modal = document.getElementById('myModal');
     var btn = document.getElementById("myBtn");
     var span = document.getElementsByClassName("close")[0];
-    var flag = 0;
+    var flag = 0;    
     var pos = new Array();
-
+    var pp1;
+    var pp2;
     btn.onclick = function get(){
         flag=1;
         if(flag==1){
             $(document).ready(function(){
                 $('#star').click(function(e) {
                     alert('x좌표:' +e.pageX + ', y좌표:' + e.pageY);
-                    pos[0]=e.pageX; pos[1]=e.pageY;
+                    pp1=e.pageX; pp2=e.pageY;
                     $(function(){
                         modal.style.display = "block"; });
                 });
             });
         }
-
+        $(document).ready(function(){
+          $("#here").click(function(){
+            pp1=parseInt(pp1);
+            pp2=parseInt(pp2);
+            $("#x").val(pp1);
+            $("#y").val(pp2);
+          })
+        })
+       
     span.onclick = function() {
     modal.style.display = "none";
     }
@@ -112,10 +136,9 @@ body, html {
     if (event.target == modal) {
         modal.style.display = "none";}
     }
-     
-    
-   
     }
     
 </script>
 
+</body>
+</html>

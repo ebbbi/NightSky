@@ -7,9 +7,11 @@ class Post(models.Model):
     pub_date=models.DateTimeField(auto_now_add=True)
     author=models.ForeignKey('auth.User', on_delete=models.CASCADE)
     emotion = models.CharField(max_length=255, blank=False)
-    lng = models.DecimalField(max_digits = 8, decimal_places = 3, default=Decimal(0))
-    lat = models.DecimalField(max_digits = 8, decimal_places = 3, default=Decimal(0))
-
+    lng=models.TextField(default='')
+    lat=models.TextField(default='')
+    #lng = models.DecimalField(max_digits = 8, decimal_places = 3, default=Decimal(0))
+    #lat = models.DecimalField(max_digits = 8, decimal_places = 3, default=Decimal(0))
+   
 class Comment(models.Model):
     post=models.ForeignKey(Post, on_delete=models.CASCADE)
     content=models.TextField(default='')
