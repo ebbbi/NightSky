@@ -52,7 +52,7 @@ body, html {
 </style>
 </head>
 <body>
-<h1>개인 밤하늘</h1>
+<h1 style="border: 2px solid blue;">개인 밤하늘</h1>
 
 <input id = "myBtn" type = "button" onclick="get()" value= "글 추가" >
 <input type="button" onclick="location.href='{% url 'user_update' %}'" value="회원정보 수정하기">
@@ -63,9 +63,13 @@ body, html {
     <button type="submit">Search</button>
 </form>
 
+
+
+
+<div id ="star" style = "width: 100%; height:100%; border:2px solid blue;">
 {% for post in posts %}
-    <div id="1" style="position:relative; width:5%;">
-        {{post.body}}<br>
+    <div id="1" style="position:relative; width:5%; border:solid 2px red;">
+        <img src="{% static "img/star.png" %}" style="width:110px; height:110px;">
     </div>
     <script>
       if(document.getElementById("1")){
@@ -82,8 +86,7 @@ body, html {
     </script>
 {% endfor %}
 
-
-<div id ="star" style = "width: 100%; height:100%;"></div>
+</div>
 
 <div id="myModal" class="modal">
 
