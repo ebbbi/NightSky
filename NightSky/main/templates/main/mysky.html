@@ -1,58 +1,8 @@
-<!DOCTYPE html>
+{% extends 'main/base.html' %}
 {% load static %}
-<html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-body{ 
-    background-image: url(https://cdn.pixabay.com/photo/2017/08/10/08/26/stars-2619979_1280.jpg);
-    background-repeat: no-repeat;
-    background-size: cover;
-    color: white;}
-  
-body, html {
-    font-family: Arial, Helvetica, sans-serif;
-    background-image: "{% static 'images/stars.jpg' %}";
-    height:100%;
-} 
-.modal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-}
-/* Modal Content/Box */
-.modal-content {
-  background-color: #fefefe;
-  margin: 15% auto; /* 15% from the top and centered */
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%; /* Could be more or less, depending on screen size */
-}
-/* The Close Button */
-.close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-.close:hover,
-.close:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
-}
-</style>
-</style>
-</head>
-<body>
-<h1 style="border: 2px solid blue;">개인 밤하늘</h1>
+{% block content %}
+
+<center><h1 style="border: 2px solid blue">{{user.username}}님의 밤하늘</h1></center>
 
 <input id = "myBtn" type = "button" onclick="get()" value= "글 추가" >
 <input type="button" onclick="location.href='{% url 'user_update' %}'" value="회원정보 수정하기">
@@ -65,10 +15,9 @@ body, html {
 
 
 
-
-<div id ="star" style = "width: 100%; height:100%; border:2px solid blue;">
+<div id ="star" style = "width: 100%; height:100%; border: 2px solid blue;">
 {% for post in posts %}
-    <div id="1" style="position:relative; width:5%; border:solid 2px red;">
+    <div class="star" id="1" style="position:relative; width:5%; border: 2px solid red;border: 2px solid red">
         <img src="{% static "img/star.png" %}" style="width:110px; height:110px;">
     </div>
     <script>
@@ -82,6 +31,7 @@ body, html {
         c.style.top=str1+'px';
         c.style.left=str2+'px';
         document.getElementById("1").setAttribute("id", "2");
+        document.getElementById("1").setAttribute("class", "star");
       }
     </script>
 {% endfor %}
@@ -104,44 +54,103 @@ body, html {
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script>
-    var modal = document.getElementById('myModal');
-    var btn = document.getElementById("myBtn");
-    var span = document.getElementsByClassName("close")[0];
-    var flag = 0;    
-    var pos = new Array();
-    var pp1;
-    var pp2;
-    btn.onclick = function get(){
-        flag=1;
-        if(flag==1){
-            $(document).ready(function(){
-                $('#star').click(function(e) {
-                    alert('x좌표:' +e.pageX + ', y좌표:' + e.pageY);
-                    pp1=e.pageX; pp2=e.pageY;
-                    $(function(){
-                        modal.style.display = "block"; });
-                });
-            });
-        }
-        $(document).ready(function(){
-          $("#here").click(function(){
-            pp1=parseInt(pp1);
-            pp2=parseInt(pp2);
-            $("#x").val(pp1);
-            $("#y").val(pp2);
-          })
+  var modal = document.getElementById('myModal');
+  var btn = document.getElementById("myBtn");
+  var span = document.getElementsByClassName("close")[0];
+  var flag = 0;    
+  var pos = new Array();
+  var pp1;
+  var pp2;
+  btn.onclick = function get(){
+      flag=1;
+      if(flag==1){
+          $(document).ready(function(){
+              $('#star').click(function(e) {
+                  alert('x좌표:' +e.pageX + ', y좌표:' + e.pageY);
+                  pp1=e.pageX; pp2=e.pageY;
+                  $(function(){
+                      modal.style.display = "block"; });
+              });
+          });
+      }
+      $(document).ready(function(){
+        $("#here").click(function(){
+          pp1=parseInt(pp1);
+          pp2=parseInt(pp2);
+          $("#x").val(pp1);
+          $("#y").val(pp2);
         })
-       
-    span.onclick = function() {
-    modal.style.display = "none";
-    }
-    window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";}
-    }
-    }
+      })
     
-</script>
+  span.onclick = function() {
+  modal.style.display = "none";
+  }
+  window.onclick = function(event) {
+  if (event.target == modal) {
+      modal.style.display = "none";}
+  }
+  }
 
-</body>
-</html>
+  /*별 반짝임과 별똥별 효과*/
+  class Star{
+      constructor(targetStar){
+          this.targetStar = targetStar;
+          this.repeat;
+      }
+      
+      shine(){  /*별 반짝임 함수*/
+          var $element = this.targetStar;
+          var time = Math.random()*(3000)+2000;
+          this.repeat = setInterval(function () {
+              $element.fadeIn(1000, function () {
+                  $element.fadeOut(1500, function () {
+                  $element.fadeIn(1000)
+                  });
+              });
+          }, time); 
+      }
+
+      shootingStar(){  /*별똥별 효과*/
+          clearInterval(this.repeat);  /*반짝임 멈춤*/
+          this.targetStar.fadeIn(1000, this.tail());  /*꼬리*/
+          var t = parseInt(this.targetStar.css('top'),10);
+          var l = parseInt(this.targetStar.css('left'),10);
+          var max_t = (700-t)/50-2;
+          var max_l = (document.body.clientWidth-l)/50-2;
+          var max = max_t<max_l?max_t:max_l;
+
+          for(var j=0; j<max; j++){  /*떨어지는 효과*/
+              this.fall();
+          }
+          this.targetStar.fadeOut(2000, function(){
+              $('#tailSky').remove();
+              $(this).remove();
+          })
+      }
+
+      fall(){  /*떨어지는 모션*/
+          $(this.targetStar).animate({
+          left: '+=50',
+          top: '+=50'
+          }, 400, 'linear', function(){
+              ;
+          });
+      }
+
+      tail(){  /*꼬리 추가*/
+          this.targetStar.append('<div id="tailSky"></div>');
+          $("#tailSky").append('<div id="tail"></div>');
+      }
+  
+  }
+
+  /*star div 마다 Star 객체 만들어서 반짝임&별똥별 효과 줌*/
+  var len = $('.star').length;
+  var starObjs = new Array();
+  for(var i=0; i<len; i++){
+      starObjs[i] = new Star($('.star').eq(i));
+      starObjs[i].shine();
+  }
+  
+</script>
+{% endblock %}

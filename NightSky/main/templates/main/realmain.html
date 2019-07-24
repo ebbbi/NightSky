@@ -1,12 +1,6 @@
-<style>
-    body{ 
-        background-image: url(https://cdn.pixabay.com/photo/2017/08/10/08/26/stars-2619979_1280.jpg);
-        background-repeat: no-repeat;
-        background-size: cover;
-        color: white;}
-</style>
-
-
+{% extends 'main/base.html' %}
+{% load static %}
+{% block content %}
 <a href="{% url 'main'%}">감정 다시선택하기</a>
 <h3>반갑습니다, {{user.username}}님!</h3>
 
@@ -18,7 +12,7 @@
         {{posts.author}}<br>
     </div>
     <script>
-      
+    
 
         if(document.getElementById("1")){
             test();
@@ -42,3 +36,5 @@
         }
     </script>
 {% endfor %}
+{% endblock %}
+
