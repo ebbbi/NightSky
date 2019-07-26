@@ -1,0 +1,38 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block content %}
+<a href="{% url 'main'%}">감정 다시선택하기</a>
+<h3>반갑습니다, {{user.username}}님!</h3>
+
+<a href="{% url 'mysky' %}"><div class="tomysky"></div></a>
+{% for posts in post %}
+    <div id="1" style="position:absolute;">
+        {{posts.author}}<br>
+    </div>
+    <script>
+    
+
+        if(document.getElementById("1")){
+            test();
+        }
+        else{
+            test2();
+        }
+        function test(){
+            var str1 = Math.round(Math.random()*800);
+            var str2 = Math.round(Math.random()*1800);
+            document.getElementById("1").style.top = str1;
+            document.getElementById("1").style.left = str2;
+            document.getElementById("1").setAttribute("id", "2");
+        }
+        function test2(){
+            var str3 = Math.round(Math.random()*800);
+            var str4 = Math.round(Math.random()*1800);
+            document.getElementById("2").style.top = str3;
+            document.getElementById("2").style.left = str4;
+            document.getElementById("2").setAttribute("id", "1");
+        }
+    </script>
+{% endfor %}
+{% endblock %}
+
