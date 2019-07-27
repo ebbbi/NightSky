@@ -55,7 +55,8 @@
 
                 
                 .content{font-family: 'East Sea Dokdo', cursive;
-                font-family: 'Noto Serif KR', serif; }
+                font-family: 'Noto Serif KR', serif; 
+                border-radius: 5rem;}
 
 
 
@@ -77,27 +78,27 @@
                     text-align:center;
                 }
                 .content label input:checked~span{
-                    border: 1px solid #008eff;
-                    background: yellow;
+                    border: 1px solid white;
+                    background: #2a346d;
 
                 }
                 .happy:hover{
-                    background: #2efe64;
+                    background: #fffacd;
                 }
                 .funny:hover{
-                    background: #2eccfa;
+                    background: #fffacd;
                 }
                 .sad:hover{
-                    background: #d8d8d8;
+                    background: #fffacd;
                 }
                 .angry:hover{
-                    background: #fe2e2e;
+                    background: #fffacd;
                 }
                 .stress:hover{
-                    background: #bf00ff;
+                    background: #fffacd;
                 }
                 .guitar:hover{
-                    background: #f7d358;
+                    background: #fffacd;
                 }
                 .content {
                     background-color: #fefefe;
@@ -106,7 +107,7 @@
                     border: 1px solid #888;
                     width: 80%;
                     text-align:center;
-                    border-radius:2pt;
+                    border-radius:5rem;
                     text
                 }
 
@@ -139,18 +140,20 @@
                             background-color: rgb(0,0,0); /* Fallback color */
                             background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
                         }
+                        
             </style>
 <script src="https://code.jquery.com/jquery-latest.js"></script> 
 </head>
 <body>
+
 <div id="myModal" class="modal">
 <h1>밤하늘</h1>
 <div id="mycontent" class="content">
 <h1>오늘의 감정을 선택하세요</h1>
         <form method="POST" action="{% url 'realmain'%}">{% csrf_token %}
             <label>
-                <input type="radio" name="emo" value="행복" required>
-                <span class="happy">행복</span>
+                <input type="radio"  name="emo" value="행복" required>
+                <span class="happy">  행복</span>
             </label>
             <label>
                 <input type="radio" name="emo" value="즐거움" required>
