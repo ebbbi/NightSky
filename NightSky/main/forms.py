@@ -2,6 +2,10 @@ from django import forms
 from .models import Post, Comment
 
 class PostForm(forms.ModelForm):
+
+    Ch=(('1', '별'), ('2', '먹구름'),)
+    emotion=forms.ChoiceField(choices=Ch, widget=forms.RadioSelect)
+    
     class Meta:
         model = Post
         fields=['body', 'emotion',]

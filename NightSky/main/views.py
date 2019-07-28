@@ -24,23 +24,7 @@ def new(request):
         form = PostForm()
 
     return render(request, {'form':form})
-
-    def post_detail(request, index):
-        post = get_object_or_404(Post, pk=index)
-        if request.method =='POST':
-            form=CommentForm(request.POST)
-            if form.is_valid:
-                comment=form.save(commit=False)
-                comment.author=request.user
-                comment.post=post
-                comment.save()
-                return redirect('post_detail', index=post.pk)
-        else:
-            form=CommentForm()
-            comments=Comment.objects.filter(post=post)
-            return render(request, 'main/post_detail.html', {'form':form, 'post':post, 'comments':comments})
-
-
+ 
 
     def post_edit(request, index):
         post = get_object_or_404(Post, pk=index)
@@ -156,3 +140,18 @@ def mysearch(request):
         word=request.POST['word']
         post=Post.objects.filter(author=request.user)&(Post.objects.filter(body__icontains=word)|Post.objects.filter(emotion__icontains=word))
         return render(request, 'main/mysky.html', {'posts':post})
+
+def postdetail(request, index):
+    post = get_object_or_404(Post, pk=index)
+    if request.method =='POST':
+        form=CommentForm(request.POST)
+        if form.is_valid:
+            comment=form.save(commit=False)
+            comment.author=request.user
+            comment.post=post
+            comment.save()
+            return redirect('post_detail', index=post.pk)
+    else:
+        form=CommentForm()
+        comments=Comment.objects.filter(post=post)
+        return render(request, 'main/mysky.html', {'form':form, 'postdetail':post, 'comments':comments})
