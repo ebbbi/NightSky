@@ -4,8 +4,58 @@
 <style>
     @font-face { font-family: 'UhBeemysen'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_five@.2.0/UhBeemysen.woff') format('woff'); font-weight: normal; font-style: normal; }
  .title{ position:relative; left: 700px; font-family: 'UhBeemysen'; font-size: 50pt;}
-</style>
+ .modal-content label{
+     cursor: pointer;
+ }
+ .modal-content label input{
+     display: none;
+ }
+ .modal-content label span{
+     position:relative;
+     display: inline-block;
+     border: 1px solid black;
+     border-radius: 20pt;
+     text-align:center;
+     color: black;
+     width:100px;
+     height:50px;
+ }
+ .modal-content label input:checked~span{
+     border:1px solid white;
+     background: #2a346d;
+     color:white;
+ }
+ .happy:hover{
+     background: #fffacd;
+ }
+ .funny:hover{
+     background: #fffacd;
+ }
+ .sad:hover{
+     background: #fffacd;
+ }
+ .angry:hover{
+     background: #fffacd;
+ }
+ .stress:hover{
+     background: #fffacd;
+ }
+ .guitar:hover{
+     background: #fffacd;
+ }
+ textarea{
+     width:90%;
+     resize:none;
+ }
 
+.modal-content label input .ima{
+
+}
+
+</style>
+<script>
+var te=new Array();
+</script>
 <div class="title">{{user.username}}님의 밤하늘</div>
 <div class="new">
     <input id = "myBtn" type = "button" onclick="get()" value="글 추가">
@@ -13,49 +63,89 @@
 
 <div id ="star" style = "width: 100%; height:100%;">
     {% for post in posts %}
-    {% if post.emotion == '1' %}        
-        <div class="star" id="1">
-            <img src="{% static "img/star.png" %}" style="width:110px; height:110px;" onclick="modalfunc();">
-        </div>
-    {%else%}
-        <div class="cloud" id="1">
-            <img src="{% static "img/cloud.png" %}" style="width:200px; height:110px;" onclick = "modalfunc();">
-        </div>
-    {%endif%}
-    <script>
-      if(document.getElementById("1")){
-        test();
-      }
-      function test(){
-        var str1=Number({{post.lat}})-60;
-        var str2=Number({{post.lng}})-60;
-        var c=document.getElementById("1");
-        c.style.top=str1+'px';
-        c.style.left=str2+'px';
-        document.getElementById("1").setAttribute("id", "2");
-        document.getElementById("1").setAttribute("class", "star");
-      }
-    </script>
-{% endfor %}
+        {% if post.image == "star" %}        
+            <div class="star" id="1">
+                <!--<a href="{% url 'post_edit' index=post.pk %}">-->
+                <img src="{% static "img/star.png" %}" style="width:110px; height:110px;" onclick="modalfunc();">
+                <!--</a>-->
+            </div>
+        {% else %}
+            <div class="cloud" id="1">
+                <img src="{% static "img/cloud.png" %}" style="width:120px; height:80px;" onclick = "modalfunc();">
+            </div>
+        {% endif %}
+        <script>
+        var id={{post.pk}};
+        var b="{{post.body}}";
+        te[id]=b;
+        if(document.getElementById("1")){
+            test();
+        }
+        function test(a){
+            var str1=Number({{post.lat}})-60;
+            var str2=Number({{post.lng}})-60;
+            var c=document.getElementById("1");
+            c.style.top=str1+'px';
+            c.style.left=str2+'px';
+            document.getElementById("1").setAttribute("id", "2");
+            //document.getElementById("1").setAttribute("class", "star");
+        
+        }
+        </script>
+    {% endfor %}
 
 </div>
 
 <div id="postmodal" class="modal">
-    <div class="modal-content" style="width: 300px; height:300px;">
+    <div class="modal-content">
             <span class="close">&times;</span>
-            <div id = "modalbody"></div>
-            <div id = "pubdate"></div>
-                  
+            <form method="POST">{% csrf_token %}
+            <div id = "modalbody">
+                <textarea rows="17" name="body" required>{{body}}</textarea>
+            </div>
+            <div id = "pubdate">{{pub_date}}</div>
+            <input type="submit" value="수정하기">
+            </form>
     </div>
 </div>
 
 <div id="myModal" class="modal">
 
   <div class="modal-content">
-    <span class="close">&times;</span>
+    <span id="close" class="close">&times;</span>
     <form method="POST" action="{% url 'mysky' %}">
             {% csrf_token %}
-            {{form.as_p}}
+            <br><br>
+            
+            <textarea rows="17" name="body" placeholder="내용" required></textarea><br><br>
+            <input type="radio" name="im" class="ima" value="star" required><span style="color:black; font-size:30px">별</span>
+            <input type="radio" name="im" class="ima" value="cloud" required><span style="color:black; font-size:30px">구름</span>
+            <br><br>
+            <label>
+                <input type="radio"  name="emo" value="행복" required>
+                <span class="happy">  행복</span>
+            </label>
+            <label>
+                <input type="radio" name="emo" value="즐거움" required>
+                <span class="funny">즐거움</span>
+            </label>
+            <label>
+                <input type="radio" name="emo" value="슬픔" required>
+                <span class="sad">슬픔</span>
+            </label>
+            <label>
+                <input type="radio" name="emo" value="화남" required>
+                <span class="angry">화남</span>
+            </label>
+            <label>
+                <input type="radio" name="emo" value="스트레스" required>
+                <span class="stress">스트레스</span>
+            </label>
+            <label>
+                <input type="radio" name="emo" value="기타" required>
+                <span class="guitar">기타</span>
+            </label>
+            <br><br>
             <input type="hidden" id="x" name="x" value="">
             <input type="hidden" id="y" name="y" value="">
             <input type="submit" id="here" value="Save">
@@ -63,65 +153,57 @@
   </div>
 </div>
 
+
+
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script>
-//modal
-function modalfunc(num)
+  var modal = document.getElementById('myModal');
+  var btn = document.getElementById("myBtn");
+  //var sp = document.getElementsByClassName("close")[0];
+  var ssp=document.getElementById("close");
+  var w=false;
+  var pp1;
+  var pp2;
+  btn.onclick=function get(){
+      alert('화면에 띄울 별이나 구름의 위치를 클릭해주세요');
+      w=document.getElementById("star");
+      w.onclick=function(e){
+          if(w){
+              pp1=e.pageX;
+              pp2=e.pageY;
+              modal.style.display="block";
+              w=false;
+          }
+      };
+  };
+  ssp.onclick=function(){
+      modal.style.display="none";
+  };
+  window.onclick=function(event){
+      if(event.target==modal){
+          modal.style.display="none";
+      }
+  };
+  $("#here").click(function(){
+      pp1=parseInt(pp1);
+      pp2=parseInt(pp2);
+      $("#x").val(pp1);
+      $("#y").val(pp2);
+  });
+  function modalfunc(num)
 {
     var postmodal = document.getElementById('postmodal'); 
     postmodal.style.display="block";
     var span = document.getElementsByClassName("close")[0];
     span.onclick = function() {
                 postmodal.style.display = "none";
-    }
+    };
     window.onclick = function(event) {
             if (event.target == modal) {
-                modal.style.display = "none";}
-    }
+                postmodal.style.display = "none";
+                }
+    };
 }
-
-
-</script>
-
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script>
-  var modal = document.getElementById('myModal');
-  var btn = document.getElementById("myBtn");
-  var span = document.getElementsByClassName("close")[0];
-  var flag = 0;    
-  var pos = new Array();
-  var pp1;
-  var pp2;
-  btn.onclick = function get(){
-      flag=1;
-      if(flag==1){
-          $(document).ready(function(){
-              $('#star').click(function(e) {
-                  alert('x좌표:' +e.pageX + ', y좌표:' + e.pageY);
-                  pp1=e.pageX; pp2=e.pageY;
-                  $(function(){
-                      modal.style.display = "block"; });
-              });
-          });
-      }
-      $(document).ready(function(){
-        $("#here").click(function(){
-          pp1=parseInt(pp1);
-          pp2=parseInt(pp2);
-          $("#x").val(pp1);
-          $("#y").val(pp2);
-        })
-      })
-    
-  span.onclick = function() {
-  modal.style.display = "none";
-  }
-  window.onclick = function(event) {
-  if (event.target == modal) {
-      modal.style.display = "none";}
-  }
-  }
-
   /*별 반짝임과 별똥별 효과*/
   class Star{
       constructor(targetStar){
@@ -140,7 +222,6 @@ function modalfunc(num)
               });
           }, time); 
       }
-
       shootingStar(){  /*별똥별 효과*/
           clearInterval(this.repeat);  /*반짝임 멈춤*/
           this.targetStar.fadeIn(1000, this.tail());  /*꼬리*/
@@ -149,7 +230,6 @@ function modalfunc(num)
           var max_t = (700-t)/50-2;
           var max_l = (document.body.clientWidth-l)/50-2;
           var max = max_t<max_l?max_t:max_l;
-
           for(var j=0; j<max; j++){  /*떨어지는 효과*/
               this.fall();
           }
@@ -158,7 +238,6 @@ function modalfunc(num)
               $(this).remove();
           })
       }
-
       fall(){  /*떨어지는 모션*/
           $(this.targetStar).animate({
           left: '+=50',
@@ -167,14 +246,12 @@ function modalfunc(num)
               ;
           });
       }
-
       tail(){  /*꼬리 추가*/
           this.targetStar.append('<div id="tailSky"></div>');
           $("#tailSky").append('<div id="tail"></div>');
       }
   
   }
-
   /*star div 마다 Star 객체 만들어서 반짝임&별똥별 효과 줌*/
   var len = $('.star').length;
   var starObjs = new Array();

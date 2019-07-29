@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect, get_object_or_404
-from .models import Post
+from .models import Post, todayemotion
 from .forms import PostForm, CommentForm
 from django.contrib.auth.models import User
 from django.contrib import auth
@@ -26,20 +26,25 @@ def new(request):
     return render(request, {'form':form})
  
 
-    def post_edit(request, index):
-        post = get_object_or_404(Post, pk=index)
-        if request.method == "POST":
-            form = PostForm(request.POST, instance=post)
-            if form.is_valid():
-                post = form.save(commit=False)
-                post.author = request.user
-                post.pub_date = timezone.now()
-                post.save()
-                return redirect('post_detail', index=post.pk)
-            else:
-                form = PostForm(instance=post)
-        return render(request, {'form': form})
-
+    #def post_edit(request, index):
+     #   post = get_object_or_404(Post, pk=index)
+      #  if request.method == "POST":
+       #     form = PostForm(request.POST, instance=post)
+        #    if form.is_valid():
+         #       post = form.save(commit=False)
+          #      post.author = request.user
+           #     post.pub_date = timezone.now()
+            #    post.save()
+             #   return redirect('post_detail', index=post.pk)
+           # else:
+            #    form = PostForm(instance=post)
+        #return render(request, {'form': form})
+def post_edit(request):
+    post=Post.objects.filter(author=request.user)
+    if request.method=="POST":
+        return redirect('mysky')
+    else:
+        return 
 
     def post_remove(request,pk):
         post=get_object_or_404(Post, pk=pk)
@@ -72,28 +77,50 @@ def comment_delete(request, index, cindex):
 def mysky(request):
     author = request.user
     posts = Post.objects.filter(author=request.user).order_by('-pub_date')
-    if request.method == 'POST':
-        form = PostForm(request.POST, request.FILES)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.author=request.user
-            post.lng=request.POST['x']
-            post.lat=request.POST['y']
-            post.save()
-            return redirect('mysky')
-    else:
-        form = PostForm()
-    return render(request, 'main/mysky.html', {'posts':posts, 'form':form})
+    if request.method=="POST":
+        author=request.user
+        body=request.POST['body']
+        emotion=request.POST['emo']
+        lng=request.POST['x']
+        lat=request.POST['y']
+        image=request.POST['im']
+        Post.objects.create(author=author, body=body, emotion=emotion, lng=lng, lat=lat, image=image)
+    
+        return redirect('mysky')
+    elif request.method=="GET":
+        return render(request, 'main/mysky.html', {'posts':posts})
+   # if request.method == 'POST':
+    #    form = PostForm(request.POST, request.FILES)
+     #   if form.is_valid():
+      #      post = form.save(commit=False)
+       #     post.author=request.user
+        #    post.lng=request.POST['x']
+         #   post.lat=request.POST['y']
+          #  post.save()
+           # return redirect('mysky')
+    #else:
+     #   form = PostForm()
+    #return render(request, 'main/mysky.html', {'posts':posts, 'form':form})
 
 def realmain(request):
     if request.method=="POST":
-        #em=request.POST['emo']
-        #post=Post.objects.filter(emotion=em)
-        #return render(request, 'realmain.html', {'post': post})
-        return render(request, 'main/realmain.html')
-
+        em=request.POST['emo']
+        posts=Post.objects.filter(emotion=em)
+        today=todayemotion.objects.filter(author=request.user)
+        if today:
+            today=todayemotion.objects.get(author=request.user)
+            today.emotion=em
+            today.save()
+        else:
+            author=request.user
+            emotion=em
+            todayemotion.objects.create(author=author, emotion=emotion)
+        return render(request, 'main/realmain.html', {'posts':posts})
     else:
-        return render(request, 'main/realmain.html')
+        today=todayemotion.objects.get(author=request.user)
+        em=today.emotion
+        posts=Post.objects.filter(emotion=em)
+        return render(request, 'main/realmain.html', {'posts':posts})
 
 def user_update(request):
         user=get_object_or_404(User, username=request.user.username)
