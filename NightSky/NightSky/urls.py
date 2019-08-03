@@ -36,6 +36,6 @@ urlpatterns = [
     path('mysky/user_update/changepw/', main.views.change_pw, name="change_pw"),
     path('mysky/mysearch/', main.views.mysearch, name="mysearch"),
     path('mysky/', main.views.postdetail, name="postdetail"), 
-    path('mysky/<int:index>', main.views.post_edit, name="post_edit"),
-
+    path('mysky/post_edit/', main.views.post_edit, name="post_edit"),
+    path('mysky/post_delete/', main.views.post_delete, name="post_delete"),
 ]

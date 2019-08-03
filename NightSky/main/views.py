@@ -4,6 +4,10 @@ from .forms import PostForm, CommentForm
 from django.contrib.auth.models import User
 from django.contrib import auth
 from django.contrib.auth.hashers import check_password
+from django.http import HttpResponse, JsonResponse
+from django.utils import timezone
+from django.core import serializers
+import json
 # Create your views here.
 def home(request):
     posts = Post.objects.all
@@ -39,16 +43,33 @@ def new(request):
            # else:
             #    form = PostForm(instance=post)
         #return render(request, {'form': form})
-def post_edit(request):
-    post=Post.objects.filter(author=request.user)
-    if request.method=="POST":
-        return redirect('mysky')
-    else:
-        return 
 
-    def post_remove(request,pk):
+def post_edit(request):
+    if request.method=="GET":
+        pk=request.GET['pk']
+        post=get_object_or_404(Post, pk=pk)
+        context={'body': post.body, 'date': post.pub_date, 'pk':pk}
+        return JsonResponse(context)
+    elif request.method=="POST":
+        pk=request.POST['pk']
+        post=get_object_or_404(Post, pk=pk)
+        post.body=request.POST['content']
+        post.save()
+        return HttpResponse()
+
+def post_delete(request):
+    if request.method=="GET":
+        pk=request.GET['pk']
         post=get_object_or_404(Post, pk=pk)
         post.delete()
+        return HttpResponse()
+        #author = request.user
+        #posts = Post.objects.filter(author=request.user).order_by('-pub_date')
+        #return render(request, 'main/mysky.html', {'posts': posts})
+      
+def post_remove(request,pk):
+    post=get_object_or_404(Post, pk=pk)
+    post.delete()
     return redirect('post_list')
 
 def main(request):
@@ -84,7 +105,8 @@ def mysky(request):
         lng=request.POST['x']
         lat=request.POST['y']
         image=request.POST['im']
-        Post.objects.create(author=author, body=body, emotion=emotion, lng=lng, lat=lat, image=image)
+        pub_date=timezone.now()
+        Post.objects.create(author=author, body=body, emotion=emotion, lng=lng, lat=lat, image=image, pub_date=pub_date)
     
         return redirect('mysky')
     elif request.method=="GET":

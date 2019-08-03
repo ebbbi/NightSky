@@ -1,10 +1,12 @@
 from __future__ import unicode_literals
 from django.db import models
 from decimal import Decimal
+from django.utils import timezone
 # Create your models here.
 class Post(models.Model):
     body=models.TextField(default='')
-    pub_date=models.DateTimeField(auto_now_add=True)
+    #pub_date=models.DateTimeField(auto_now_add=True)
+    pub_date=models.DateTimeField(default=timezone.now)
     author=models.ForeignKey('auth.User', on_delete=models.CASCADE)
     emotion = models.CharField(max_length=255, blank=False)
     image=models.TextField(default='')

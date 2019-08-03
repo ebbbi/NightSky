@@ -52,9 +52,14 @@
 
 }
 
+.edit{
+    display: flex;
+    justify-content: center;
+}
 </style>
 <script>
 var te=new Array();
+var pk;
 </script>
 <div class="title">{{user.username}}님의 밤하늘</div>
 <div class="new">
@@ -65,13 +70,19 @@ var te=new Array();
     {% for post in posts %}
         {% if post.image == "star" %}        
             <div class="star" id="1">
-                <!--<a href="{% url 'post_edit' index=post.pk %}">-->
+                <div class="update" name="{{post.id}}" >
+               
                 <img src="{% static "img/star.png" %}" style="width:110px; height:110px;" onclick="modalfunc();">
-                <!--</a>-->
+                
+                </div>
             </div>
         {% else %}
             <div class="cloud" id="1">
-                <img src="{% static "img/cloud.png" %}" style="width:120px; height:80px;" onclick = "modalfunc();">
+                <div class="update" name="{{post.id}}" >
+                    
+                    <img src="{% static "img/cloud.png" %}" style="width:120px; height:80px;" onclick = "modalfunc();">
+                    
+                </div>
             </div>
         {% endif %}
         <script>
@@ -99,13 +110,19 @@ var te=new Array();
 <div id="postmodal" class="modal">
     <div class="modal-content">
             <span class="close">&times;</span>
-            <form method="POST">{% csrf_token %}
+            <!--<form method="POST">{% csrf_token %}-->
             <div id = "modalbody">
-                <textarea rows="17" name="body" required>{{body}}</textarea>
+                <textarea rows="17" id="textbody" value="" required></textarea>
             </div>
-            <div id = "pubdate">{{pub_date}}</div>
-            <input type="submit" value="수정하기">
-            </form>
+            <div class="edit">
+                <div class="change">
+                    <input type="button" value="수정하기">
+                </div>
+                <div class="delete">
+                    <input type="button" value="삭제하기">
+                </div>
+            </div>
+            <!--</form>-->
     </div>
 </div>
 
@@ -156,7 +173,9 @@ var te=new Array();
 
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
+/*글쓰기 위한 modal*/
   var modal = document.getElementById('myModal');
   var btn = document.getElementById("myBtn");
   //var sp = document.getElementsByClassName("close")[0];
@@ -190,20 +209,76 @@ var te=new Array();
       $("#x").val(pp1);
       $("#y").val(pp2);
   });
+  /*글 수정 위한 modal*/
   function modalfunc(num)
 {
     var postmodal = document.getElementById('postmodal'); 
     postmodal.style.display="block";
+    
     var span = document.getElementsByClassName("close")[0];
     span.onclick = function() {
                 postmodal.style.display = "none";
     };
     window.onclick = function(event) {
-            if (event.target == modal) {
-                postmodal.style.display = "none";
-                }
+        if (event.target == modal) {
+            postmodal.style.display = "none";
+        }
     };
 }
+/*글 갖고오기 위한 ajax*/
+$(".update").click(function(){
+    pk=$(this).attr('name');
+    $.ajax({
+        type:"GET",
+        url: "post_edit/",
+        data: {'pk': pk},
+        dataType: "json",
+        contentType: "json",
+        success: function(msg){
+            
+            $("#textbody").val(msg['body']);
+            //$("#textpk").val(msg['pk']);
+            //$("#textdate").val(msg['date']);
+        },
+        error: function(response){
+            alert('fail');
+            $("#textbody").html("오류발생");
+        }
+    })
+});
+/*글 수정 위한 ajax*/
+$(".change").click(function(){
+    var content=$('#textbody').val();
+    $.ajax({
+        type:"POST",
+        url:"post_edit/",
+        data:{'pk':pk, 'content': content, 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+        success:function(response){
+            alert('글 수정이 완료되었습니다.');
+            var postmod = document.getElementById('postmodal'); 
+            postmod.style.display="none";
+        },
+        error:function(response){
+            alert('fail2');
+        }
+    })
+});
+/*글 삭제 위한 ajax*/
+$(".delete").click(function(){
+    $.ajax({
+        type:"GET",
+        url:"post_delete/",
+        data:{'pk':pk},
+        success:function(response){
+            alert('글 삭제가 완료되었습니다.');
+            location.href="{% url 'mysky' %}"
+        },
+        error:function(response){
+            alert('fail3');
+        }
+    })
+});
+
   /*별 반짝임과 별똥별 효과*/
   class Star{
       constructor(targetStar){
