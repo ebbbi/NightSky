@@ -1,0 +1,102 @@
+<style>
+  @font-face { font-family: 'UhBeemysen'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_five@.2.0/UhBeemysen.woff') format('woff'); font-weight: normal; font-style: normal; }
+
+body{ 
+                background-image: url(https://cdn.pixabay.com/photo/2017/08/10/08/26/stars-2619979_1280.jpg);
+                background-repeat: no-repeat;
+                background-size: cover;
+                color: white;
+                font-family: 'UhBeemysen';
+                }
+
+                .title{color: white;
+                font-family: 'UhBeemysen'; font-size: 50pt; position:relative; left:750px; }
+
+                .tab-content,.nav-item{color: white; font-family: 'UhBeemysen';}
+</style>
+
+
+<head>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="title">
+  <h1>내 정보 수정</h1>
+</div>
+{% if message %}
+  <h2 style="color: red;">{{message}}</h2><br>
+{% endif %}
+{% if message2 %}
+  <h2 style="color: red;">{{message2}}</h2><br>
+{% endif %}
+{% if message3 %}
+  <h2 style="color: red;">{{message3}}</h2><br>
+{% endif %}
+{% if message4 %}
+  <h2 style="color: red;">{{message4}}</h2><br>
+{% endif %}
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#ID수정" role="tab" aria-controls="home" aria-selected="true"><h3>ID 수정</h3></a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#이메일수정" role="tab" aria-controls="profile" aria-selected="false"><h3>이메일 수정</h3></a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#비밀번호변경" role="tab" aria-controls="profile" aria-selected="false"><h3>비밀번호 변경</h3></a>
+  </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+  <div class="tab-pane fade show active" id="ID수정" role="tabpanel" aria-labelledby="home-tab">
+    <form method="POST" action="{% url 'change_ID' %}">{% csrf_token %}
+        <h3>현재 ID: {{user.username}}</h2><br>
+        <h3>바꿀 ID: <input type="text" placeholder="New ID" name="NEWID" required></h2>
+        {% if message4 %}
+            <h2 style="color: red;">{{message4}}</h2><br>
+        {% endif %}
+        <button type="submit">수정하기</button>
+        
+    </form>
+  </div>
+  <div class="tab-pane fade" id="이메일수정" role="tabpanel" aria-labelledby="profile-tab">
+    <h2>현재 Email: {{user.email}}</h2><br>
+    <form method="POST" action="{% url 'change_Email' %}">{% csrf_token %}
+        <h2>바꿀 Email: <input type="text" name="NEWEMAIL" placeholder= "New Email"  required></h2><br>
+        <button type="submit">수정하기</button>
+    </form>
+  </div>
+  <div class="tab-pane fade" id="비밀번호변경" role="tabpanel" aria-labelledby="profile-tab">
+    <form method="POST" action="{% url 'change_pw'%}">{% csrf_token %}
+        
+        <h2>현재 비밀번호: <input type="password" name="origin" placeholder="Origin Password" required></h2><br>
+        {% if message %}
+            <h2 style="color: red;">{{message}}</h2><br>
+        {% endif %}
+        <h2>새 비밀번호: <input type="password" name="password1" placeholder="New PassWord" required></h2><br>
+        <h2>새 비밀번호 확인: <input type="password" name="password2" placeholder="Confirm Password" required></h2><br>
+        {% if message2 %}
+            <h2 style="color: red;">{{message2}}</h2><br>
+        {% endif %}
+        <button type="submit">수정하기</button>
+    </form>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
