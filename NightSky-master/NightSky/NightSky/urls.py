@@ -16,27 +16,18 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 import main.views
-from accounts import views as user_views
-from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', main.views.home, name="home"),
-    path('main/', main.views.main, name="main"),
+<<<<<<< Updated upstream
+=======
+    path('main/', main.views.total, name="total"),
     path('accounts/', user_views.register, name="register"),
-    path('accounts/login/', user_views.login, name="login"),
-    path('accoutns/logout/', user_views.logout, name="logout"),
-    path('comment/<int:index>/delete/<int:cindex>/',main.views.comment_delete, name="comment_delete"),
-    path('comment/<int:index>/edit/<int:cindex>/', main.views.comment_edit, name="comment_edit"),
-    path('mysky/', main.views.mysky, name="mysky"), 
-    path('realmain/', main.views.realmain, name="realmain"),
-    path('mysky/user_update/', main.views.user_update, name="user_update"),
-    path('mysky/user_update/changeid/', main.views.change_ID, name="change_ID"),
-    path('mysky/user_update/changeemail/', main.views.change_Email, name="change_Email"),
-    path('mysky/user_update/changepw/', main.views.change_pw, name="change_pw"),
-    path('mysky/mysearch/', main.views.mysearch, name="mysearch"),
-    path('mysky/', main.views.post_detail, name="post_detail"), 
-    path('mysky/post_edit/', main.views.post_edit, name="post_edit"),
-    path('mysky/post_delete/', main.views.post_delete, name="post_delete"),
-   
+    path('accounts/', user_views.register_done, name="register_done"),
+    path('accounts/login', user_views.login, name="login"),
+    path('accoutns/logout', user_views.logout, name="logout"),
+    path('comment/<int:index>/delete/<int:cindex>/',views.comment_delete, name="comment_delete"), 
+    path('comment/<int:index>/edit/<int:cindex>/', views.comment_edit, name="comment_edit"),
+>>>>>>> Stashed changes
 ]
