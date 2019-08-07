@@ -2,16 +2,56 @@
 <html>
 <head>
 <style>
+*:focus { outline:none; }
         
  body{ 
                 background-image: url(https://cdn.pixabay.com/photo/2017/08/10/08/26/stars-2619979_1280.jpg);
                 background-repeat: no-repeat;
                 background-size: cover;
                 color: white;
+                font-family: 'Noto Serif KR', serif;
                 }
 .register{
         text-align:center;
 }
+
+input{
+  position: absolute;
+  left: 700px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid white;
+  color: white;
+  font-size: 15px;
+  height: 15px;
+}
+
+button{
+        background: transparent;
+        height: 40px;
+        width: 90px;
+        border: 1px solid white;
+        border-radius: 2rem;
+        margin: 15px;
+
+        font-size: 18px;
+        color: white;
+        font-family: 'Noto Serif KR', serif;
+
+        cursor: pointer;
+}
+
+button:hover{
+        background-color: rgba(255, 255, 255, 1);   
+        color: dodgerblue;
+}
+
+span{
+        position: absolute;
+        left: 570px;
+}
+
+
 </style>
 </head>
 <body>
@@ -19,16 +59,16 @@
 
 <div class="register">
 <form action="{% url 'register' %}" method="POST">{% csrf_token %}
-        <input name="username" placeholder='id' type="text" value='{{username}}'  required >
+        <span>아이디: </span><input name="username" placeholder='' type="text" value='{{username}}'  required>
         <br><br>
         {% if message2 %}
                 {{message2}}<br><br>
         {% endif %}
-        <input name="email" placeholder='email' type="text" value='{{email}}' required>
+        <span>이메일: </span> <input name="email" placeholder='' type="text" value='{{email}}' required>
         <br><br>
-        <input name="password1" id="pw" placeholder='password1' type="password" required>
+        <span>비밀번호: </span> <input name="password1" id="pw" placeholder='' type="password" required>
         <br><br>
-        <input name="password2" id="checkpw" placeholder='password2' type="password" required>
+        <span>비밀번호 확인: </span> <input name="password2" id="checkpw" placeholder='' type="password" required>
         <br><br>
         {% if message1 %}
                 {{message1}}<br><br>
@@ -36,7 +76,9 @@
         
         <br>
         <!--{{form.as_p}}-->
-        <button type="submit">Sign in</button>
+        <button type="submit">가입하기</button>
+        <button type="button" onClick="location.href='{% url 'home' %}'" style="color:rgb(114, 114, 114)">뒤로가기</button>
+        
         
 </form>
 </div>
