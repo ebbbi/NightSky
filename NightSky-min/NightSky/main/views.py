@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect, get_object_or_404
-from .models import Post, todayemotion
+from .models import Post, todayemotion, Comment
 from .forms import PostForm, CommentForm
 from django.contrib.auth.models import User
 from django.contrib import auth
@@ -209,23 +209,24 @@ def postdetail(request, index):
         return render(request, 'main/mysky.html', {'form':form, 'postdetail':post, 'comments':comments})
 """
 
-def post_detail(request, post_id):
-
-    post = get_object_or_404(Post, pk=post_id)
-
-    #만약 post일때만 댓글 입력에 관한 처리를 더한다.
-
-    if request.method == "POST":
-        comment_form = CommentForm(request.POST)
-        comment_form.instance.author_id = request.user.id
-        comment_form.instance.post_id = post_id
-        if comment_form.is_valid():
-            comment = comment_form.save()
-
-
-    #models.py에서 document의 related_name을 comments로 해놓았다.
-
-    comment_form = CommentForm()
-    comments = post.comments.all()
-
-    return render(request, 'main/post_detail.html', {'object':document, "comments":comments, "comment_form":comment_form})
+def postdetail(request):
+        if request.method=="GET":
+            pk=request.GET['pk']
+            post=get_object_or_404(Post, pk=pk)
+            comments=Comment.objects.filter(post=post)
+            data=[]
+            for comment in comments:
+                data.append(comment.content)
+                data.append(comment.created_at)
+                data.append(comment.writer)
+            context={'comments': data }
+            return JsonResponse(context)
+        elif request.method=="POST":
+            pk=request.POST['postpk']
+            post=get_object_or_404(Post, pk=pk)
+            author=request.user
+            writer=request.user
+            created_at=timezone.now()
+            content=request.POST['content']
+            Comment.objects.create(writer=writer, content=content, post=post, created_at=created_at, author=author)
+            return HttpResponse()

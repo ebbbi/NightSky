@@ -16,25 +16,13 @@ class Post(models.Model):
     distinct=models.TextField(default='')
     #lng = models.DecimalField(max_digits = 8, decimal_places = 3, default=Decimal(0))
     #lat = models.DecimalField(max_digits = 8, decimal_places = 3, default=Decimal(0))
-"""   
-class Comment(models.Model):
-    post=models.ForeignKey(Post, on_delete=models.CASCADE)
-    content=models.TextField(default='')
-    author = models.ForeignKey('auth.user', on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add = True)
-"""
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
-    author = models.ForeignKey(get_user_model(), on_delete=models.SET_NULL, null=True, blank=True, related_name='comments')
-    text = models.TextField()
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-    like = models.IntegerField(default=0)
-    dislike = models.IntegerField(default=0)
-
-    def __str__(self):
-        return (self.author.username if self.author else "무명")+ "의 댓글"
+    content = models.TextField(default='')
+    author = models.ForeignKey('auth.user', on_delete=models.CASCADE, default='')
+    writer = models.CharField(max_length=255, default='', blank=True)
+    created_at = models.DateTimeField(default = timezone.now)
 
 class todayemotion(models.Model):
     emotion=models.TextField(default='')
